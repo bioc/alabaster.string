@@ -1,0 +1,79 @@
+---
+title: Saving `XStringSet`s to artifacts and back again
+author:
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+package: alabaster.string
+date: "Revised: September 22, 2022"
+output:
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Saving and loading XStringSets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(BiocStyle)
+self <- Githubpkg("ArtifactDB/alabaster.string")
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+```
+
+# Overview 
+
+The `r self` package implements methods to save `XStringSet` objects to file artifacts and load them back into R.
+Check out the `r Githubpkg("ArtifactDB/alabaster.base")` for more details on the motivation and concepts of the **alabaster** framework.
+
+# Quick start
+
+Given an `XStringSet`, we can use `stageObject()` to save it inside a staging directory:
+
+```{r}
+library(Biostrings)
+x <- DNAStringSet(c(seq1="CTCNACCAGTAT", seq2="TTGA", seq3="TACCTAGAG"))
+mcols(x)$score <- runif(length(x))
+x
+
+library(alabaster.string)
+tmp <- tempfile()
+dir.create(tmp)
+meta <- stageObject(x, tmp, "dna")
+.writeMetadata(meta, tmp)
+
+list.files(tmp, recursive=TRUE)
+```
+
+We can then load it back into the session with `loadObject()`.
+
+```{r}
+meta <- acquireMetadata(tmp, "dna/set.json")
+roundtrip <- loadObject(meta, tmp)
+class(roundtrip)
+```
+
+More details on the metadata and on-disk layout are provided in the [schema](https://artifactdb.github.io/BiocObjectSchemas/html/sequence_string_set/v1.html).
+
+# Quality scaled strings
+
+The same approach works with `QualityScaledXStringSet` objects:
+
+```{r}
+x <- DNAStringSet(c("TTGA", "CTCN"))
+q <- PhredQuality(c("*+,-", "6789"))
+y <- QualityScaledDNAStringSet(x, q)
+
+library(alabaster.string)
+tmp <- tempfile()
+dir.create(tmp)
+meta <- stageObject(y, tmp, "dna2")
+
+roundtrip <- loadObject(meta, tmp)
+class(roundtrip)
+```
+
+# Session information {-}
+
+```{r}
+sessionInfo()
+```
+
