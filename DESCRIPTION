@@ -1,5 +1,5 @@
 Package: alabaster.string
-Title: Save and load Sequences to/from File
+Title: Save and Load Biostrings to/from File
 Version: 1.0.1
 Date: 2023-05-01
 Description: Save Biostrings objects to file artifacts, and load them back into memory.
