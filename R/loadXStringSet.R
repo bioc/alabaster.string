@@ -25,15 +25,16 @@ loadXStringSet <- function(seq.info, project) {
     seq.meta <- acquireMetadata(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
     seq.file <- acquireFile(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
 
-    type <- seq.meta$sequence_file$type
-    if (seq.meta$sequence_file$format == "FASTQ") {
-        if (type == "DNA") {
-            x <- readQualityScaledDNAStringSet(seq.file, quality.scoring=tolower(seq.meta$sequence_file$quality_encoding))
+    if ("fastq_file" %in% names(seq.meta)) {
+        type <- seq.meta$fastq_file$type
+        if (is.null(type) || type == "DNA") {
+            x <- readQualityScaledDNAStringSet(seq.file, quality.scoring=tolower(seq.meta$fastq_file$quality_encoding))
         } else {
             stop("unknown quality scaled sequence type '", type, "'")
         }
     } else {
-        if (type == "DNA") {
+        type <- seq.meta$fasta_file$type
+        if (is.null(type) || type == "DNA") {
             x <- readDNAStringSet(seq.file)
         } else if (type == "RNA") {
             x <- readRNAStringSet(seq.file)
