@@ -15,8 +15,8 @@ test_that("saving and loading works without names", {
     expect_match(seq.path, ".fa.gz$")
 
     seq.meta <- acquireMetadata(tmp, seq.path)
-    expect_identical(seq.meta$sequence_file$format, "FASTA")
-    expect_identical(seq.meta$sequence_file$type, "DNA")
+    expect_identical(seq.meta$fasta_file$type, "DNA")
+    expect_identical(seq.meta$fasta_file$compression, "gzip")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, stuff)
@@ -74,8 +74,7 @@ test_that("saving and loading works with RNA", {
     expect_match(seq.path, ".fa.gz$")
 
     seq.meta <- acquireMetadata(tmp, seq.path)
-    expect_identical(seq.meta$sequence_file$format, "FASTA")
-    expect_identical(seq.meta$sequence_file$type, "RNA")
+    expect_identical(seq.meta$fasta_file$type, "RNA")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, rstuff)
@@ -93,8 +92,8 @@ test_that("saving and loading works with proteins", {
     expect_match(seq.path, ".fa.gz$")
 
     seq.meta <- acquireMetadata(tmp, seq.path)
-    expect_identical(seq.meta$sequence_file$format, "FASTA")
-    expect_identical(seq.meta$sequence_file$type, "AA")
+    expect_identical(seq.meta$fasta_file$type, "AA")
+    expect_identical(seq.meta$fasta_file$compression, "gzip")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, astuff)

@@ -15,7 +15,8 @@ test_that("saving and loading works for quality scaled DNAStringSets", {
     expect_match(info$sequence_string_set$sequence_file$resource$path, ".fastq.gz$")
 
     seq.meta <- alabaster.base::acquireMetadata(tmp, info$sequence_string_set$sequence_file$resource$path)
-    expect_identical(seq.meta$sequence_file$quality_encoding, "phred")
+    expect_identical(seq.meta$fastq_file$quality_encoding, "phred")
+    expect_identical(seq.meta$fastq_file$compression, "gzip")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)
@@ -30,7 +31,7 @@ test_that("saving and loading acknowledges the quality encoding type", {
     info <- stageObject(qstuff, tmp, path="dna_thing")
     .writeMetadata(info, tmp)
     seq.meta <- alabaster.base::acquireMetadata(tmp, info$sequence_string_set$sequence_file$resource$path)
-    expect_identical(seq.meta$sequence_file$quality_encoding, "illumina")
+    expect_identical(seq.meta$fastq_file$quality_encoding, "illumina")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)
@@ -40,7 +41,7 @@ test_that("saving and loading acknowledges the quality encoding type", {
     info <- stageObject(qstuff, tmp, path="dna_thing_solexa")
     .writeMetadata(info, tmp)
     seq.meta <- alabaster.base::acquireMetadata(tmp, info$sequence_string_set$sequence_file$resource$path)
-    expect_identical(seq.meta$sequence_file$quality_encoding, "solexa")
+    expect_identical(seq.meta$fastq_file$quality_encoding, "solexa")
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)

@@ -45,33 +45,30 @@ setMethod("stageObject", "XStringSet", function(x, dir, path, child=FALSE, ...) 
         stop("unknown sequence type for '", class(x)[1], "'")
     }
 
-    meta <- list(
-        `$schema`="sequence_file/v1.json",
-        is_child=TRUE,
-        sequence_file=list(
-            type=type,
-            compression="gzip"
-        )
-    )
+    meta <- list(is_child=TRUE)
+    inner <- list(compression="gzip", type=type)
 
     if (is(x, "QualityScaledXStringSet")) {
         target <- "sequence.fastq.gz"
         meta$path <- file.path(path, target)
-        meta$sequence_file$format <- "FASTQ"
+        meta[["$schema"]] <- "fastq_file/v1.json"
 
         Q <- quality(copy)
-        meta$sequence_file$quality_encoding <- switch(as.character(class(Q)),
+        encoding <- switch(as.character(class(Q)),
             PhredQuality="phred",
             SolexaQuality="solexa",
             IlluminaQuality="illumina",
             stop("unrecognized quality string encoding")
         )
+        inner$quality_encoding <- encoding
+        meta$fastq_file <- inner
 
         writeQualityScaledXStringSet(copy, filepath=file.path(full, target), compress=TRUE)
     } else {
         target <- "sequence.fa.gz"
         meta$path <- file.path(path, target)
-        meta$sequence_file$format <- "FASTA"
+        meta[["$schema"]] <- "fasta_file/v1.json"
+        meta$fasta_file <- inner
         writeXStringSet(copy, filepath=file.path(full, target), compress=TRUE)
     }
 
