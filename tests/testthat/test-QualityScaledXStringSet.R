@@ -20,6 +20,11 @@ test_that("saving and loading works for quality scaled DNAStringSets", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(qstuff, tmp)
+    expect_identical(readObject(tmp), qstuff)
 })
 
 test_that("saving and loading acknowledges the quality encoding type", {
@@ -36,6 +41,10 @@ test_that("saving and loading acknowledges the quality encoding type", {
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)
 
+    tmp <- tempfile()
+    saveObject(qstuff, tmp)
+    expect_identical(readObject(tmp), qstuff)
+
     # Works with the Solexa encoding:
     qstuff <- QualityScaledDNAStringSet(stuff, SolexaQuality(scores))
     info <- stageObject(qstuff, tmp, path="dna_thing_solexa")
@@ -45,4 +54,8 @@ test_that("saving and loading acknowledges the quality encoding type", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, qstuff)
+
+    tmp <- tempfile()
+    saveObject(qstuff, tmp)
+    expect_identical(readObject(tmp), qstuff)
 })

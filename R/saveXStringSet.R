@@ -1,13 +1,11 @@
-#' Stage a XStringSet
+#' Save a XStringSet
 #'
-#' Stage a XStringSet by saving it to the appropriate file format.
+#' Save a \linkS4class{XStringSet} to its on-disk representation.
 #'
 #' @param x A \linkS4class{XStringSet} or any of its subclasses, in particular a \linkS4class{QualityScaledXStringSet}.
-#' @inheritParams alabaster.base::stageObject
+#' @inheritParams alabaster.base::saveObject
 #'
-#' @return A list containing metadata for \code{x}.
-#' A subdirectory is created at \code{path} inside \code{dir} and the contents of \code{x} are saved to various files within that subdirectory.
-#' If \code{x} is a QualityScaledXStringSet, a FASTQ file is created instead of a FASTA file.
+#' @return The contents of \code{x} are saved into a \code{path}, and \code{NULL} is invisibly returned.
 #'
 #' @author Aaron Lun
 #' @examples
@@ -15,15 +13,78 @@
 #' stuff <- DNAStringSet(c("AAA", "CC", "G", "TTTT"))
 #'
 #' tmp <- tempfile()
-#' dir.create(tmp)
-#' stageObject(stuff, tmp, path="dna_thing")
+#' saveObject(stuff, tmp)
 #' list.files(tmp, recursive=TRUE)
 #'
 #' @export
-#' @rdname stageXStringSet
+#' @rdname saveXStringSet
+#' @aliases stageObject,XStringSet-method
 #' @importFrom Biostrings writeXStringSet writeQualityScaledXStringSet quality
 #' @importClassesFrom Biostrings XStringSet QualityScaledXStringSet 
+#' @importFrom S4Vectors mcols
 #' @import alabaster.base methods
+#' @importFrom utils write.table
+setMethod("saveObject", "XStringSet", function(x, path, ...) {
+    dir.create(path, showWarnings=FALSE)
+
+    details <- list(version="1.0", length=length(x))
+
+    if (is(x, "DNAStringSet")) {
+        details$sequence_type <- "DNA"
+    } else if (is(x, "RNAStringSet")) {
+        details$sequence_type <- "RNA"
+    } else if (is(x, "AAStringSet")) {
+        details$sequence_type <- "AA"
+    } else {
+        details$sequence_type <- "custom"
+    }
+
+    has.qual <- FALSE
+    if (is(x, "QualityScaledXStringSet")) {
+        has.qual <- TRUE
+        Q <- quality(x)
+        if (is(Q, "PhredQuality")) {
+            details$quality_type <- "phred"
+            details$quality_offset <- 33
+        } else if (is(Q, "SolexaQuality")) {
+            details$quality_type <- "solexa"
+        } else if (is(Q, "IlluminaQuality")) {
+            details$quality_type <- "phred"
+            details$quality_offset <- 64
+        } else {
+            stop("unrecognized quality string encoding")
+        }
+    }
+
+    saveObjectFile(
+        path, 
+        "sequence_string_set", 
+        list(sequence_string_set=details)
+    )
+
+    copy <- x
+    names(copy) <- seq_along(copy) - 1L
+    if (has.qual) {
+        writeQualityScaledXStringSet(copy, filepath=file.path(path, "sequences.fastq.gz"), compress=TRUE)
+    } else {
+        writeXStringSet(copy, filepath=file.path(path, "sequences.fasta.gz"), compress=TRUE)
+    }
+
+    if (!is.null(names(x))) {
+        con <- gzfile(file.path(path, "names.txt.gz"), open="wb")
+        on.exit(close(con))
+        write.table(file=con, x=data.frame(names(x)), col.names=FALSE, row.names=FALSE, quote=TRUE)
+    }
+
+    saveMetadata(x, mcols.path=file.path(path, "sequence_annotations"), metadata.path=file.path(path, "other_annotations"), ...)
+    invisible(NULL)
+})
+
+##################################
+######### OLD STUFF HERE #########
+##################################
+
+#' @export
 setMethod("stageObject", "XStringSet", function(x, dir, path, child=FALSE, ...) {
     full <- file.path(dir, path)
     dir.create(full, showWarnings=FALSE)

@@ -20,6 +20,11 @@ test_that("saving and loading works without names", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, stuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })
 
 test_that("saving and loading works with names", {
@@ -33,6 +38,11 @@ test_that("saving and loading works with names", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, stuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })
 
 test_that("saving and loading works with mcols", {
@@ -47,6 +57,11 @@ test_that("saving and loading works with mcols", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_equal(roundtrip, stuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })
 
 test_that("saving and loading works with metadata", {
@@ -60,6 +75,11 @@ test_that("saving and loading works with metadata", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_equal(roundtrip, stuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })
 
 test_that("saving and loading works with RNA", {
@@ -78,6 +98,11 @@ test_that("saving and loading works with RNA", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, rstuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })
 
 test_that("saving and loading works with proteins", {
@@ -97,4 +122,16 @@ test_that("saving and loading works with proteins", {
 
     roundtrip <- loadXStringSet(info, tmp)
     expect_identical(roundtrip, astuff)
+
+    # Trying in the new world.
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
+})
+
+test_that("saving and loading works with custom things", {
+    stuff <- BStringSet(c("XXX", "uuu", "???", "acgt"))
+    tmp <- tempfile()
+    saveObject(stuff, tmp)
+    expect_identical(readObject(tmp), stuff)
 })

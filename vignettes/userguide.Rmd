@@ -4,7 +4,7 @@ author:
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
 package: alabaster.string
-date: "Revised: September 22, 2022"
+date: "Revised: December 27, 2023"
 output:
   BiocStyle::html_document
 vignette: >
@@ -15,18 +15,18 @@ vignette: >
 
 ```{r, echo=FALSE}
 library(BiocStyle)
-self <- Githubpkg("ArtifactDB/alabaster.string")
+self <- Biocpkg("alabaster.string")
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 ```
 
 # Overview 
 
 The `r self` package implements methods to save `XStringSet` objects to file artifacts and load them back into R.
-Check out the `r Githubpkg("ArtifactDB/alabaster.base")` for more details on the motivation and concepts of the **alabaster** framework.
+Check out the `r Biocpkg("alabaster.base")` for more details on the motivation and concepts of the **alabaster** framework.
 
 # Quick start
 
-Given an `XStringSet`, we can use `stageObject()` to save it inside a staging directory:
+Given an `XStringSet`, we can use `saveObject()` to save it inside a staging directory:
 
 ```{r}
 library(Biostrings)
@@ -36,18 +36,15 @@ x
 
 library(alabaster.string)
 tmp <- tempfile()
-dir.create(tmp)
-meta <- stageObject(x, tmp, "dna")
-.writeMetadata(meta, tmp)
+saveObject(x, tmp)
 
 list.files(tmp, recursive=TRUE)
 ```
 
-We can then load it back into the session with `loadObject()`.
+We can then load it back into the session with `readObject()`.
 
 ```{r}
-meta <- acquireMetadata(tmp, "dna/set.json")
-roundtrip <- loadObject(meta, tmp)
+roundtrip <- readObject(tmp)
 class(roundtrip)
 ```
 
@@ -64,10 +61,9 @@ y <- QualityScaledDNAStringSet(x, q)
 
 library(alabaster.string)
 tmp <- tempfile()
-dir.create(tmp)
-meta <- stageObject(y, tmp, "dna2")
+saveObject(y, tmp)
 
-roundtrip <- loadObject(meta, tmp)
+roundtrip <- readObject(tmp)
 class(roundtrip)
 ```
 

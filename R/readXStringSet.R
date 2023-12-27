@@ -14,13 +14,60 @@
 #' stuff <- DNAStringSet(c("AAA", "CC", "G", "TTTT"))
 #'
 #' tmp <- tempfile()
-#' dir.create(tmp)
-#' info <- stageObject(stuff, tmp, path="dna_thing")
-#' loadXStringSet(info, project=tmp)
+#' saveObject(stuff, tmp)
+#' readObject(tmp)
 #' 
 #' @export
+#' @aliases readXStringSet
 #' @importFrom Biostrings readDNAStringSet readRNAStringSet readAAStringSet readQualityScaledDNAStringSet
 #' @importFrom alabaster.base acquireFile acquireMetadata .restoreMetadata
+#' @importFrom utils read.table
+readXStringSet <- function(path, metadata, ...) {
+    info <- metadata$sequence_string_set
+
+    if (!is.null(info$quality_type) && info$quality_type != "none") {
+        if (info$sequence_type != "DNA") {
+            stop("unknown quality scaled sequence type '", type, "'")
+        }
+        if (info$quality_type == "phred") {
+            if (info$quality_offset == 33) {
+                qscore <- "phred"
+            } else {
+                qscore <- "illumina"
+            }
+        } else {
+            qscore <- "solexa"
+        }
+        x <- readQualityScaledDNAStringSet(file.path(path, "sequences.fastq.gz"), quality.scoring=qscore)
+
+    } else {
+        seq.file <- file.path(path, "sequences.fasta.gz")
+        if (info$sequence_type == "DNA") {
+            x <- readDNAStringSet(seq.file)
+        } else if (info$sequence_type == "RNA") {
+            x <- readRNAStringSet(seq.file)
+        } else if (info$sequence_type == "AA") {
+            x <- readAAStringSet(seq.file)
+        } else {
+            x <- readBStringSet(seq.file)
+        }
+    }
+
+    name.path <- file.path(path, "names.txt.gz")
+    if (file.exists(name.path)) {
+        names(x) <- read.table(name.path)[,1]
+    } else {
+        names(x) <- NULL
+    }
+
+    readMetadata(x, mcols.path=file.path(path, "sequence_annotations"), metadata.path=file.path(path, "other_annotations"), ...)
+}
+
+##################################
+######### OLD STUFF HERE #########
+##################################
+
+#' @export
 loadXStringSet <- function(seq.info, project) {
     seq.meta <- acquireMetadata(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
     seq.file <- acquireFile(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
