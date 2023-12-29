@@ -3,12 +3,12 @@
 \name{saveObject,XStringSet-method}
 \alias{saveObject,XStringSet-method}
 \alias{stageObject,XStringSet-method}
-\title{Save a XStringSet}
+\title{Save a XStringSet to disk}
 \usage{
 \S4method{saveObject}{XStringSet}(x, path, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{XStringSet} or any of its subclasses, in particular a \linkS4class{QualityScaledXStringSet}.}
+\item{x}{A \linkS4class{XStringSet} or any of its subclasses such as a \linkS4class{QualityScaledXStringSet}.}
 
 \item{path}{String containing the path to a directory in which to save \code{x}.}
 
@@ -28,6 +28,9 @@ tmp <- tempfile()
 saveObject(stuff, tmp)
 list.files(tmp, recursive=TRUE)
 
+}
+\seealso{
+\code{\link{readXStringSet}}, to read the XStringSet back into the R session.
 }
 \author{
 Aaron Lun

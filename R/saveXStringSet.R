@@ -1,11 +1,14 @@
-#' Save a XStringSet
+#' Save a XStringSet to disk
 #'
 #' Save a \linkS4class{XStringSet} to its on-disk representation.
 #'
-#' @param x A \linkS4class{XStringSet} or any of its subclasses, in particular a \linkS4class{QualityScaledXStringSet}.
+#' @param x A \linkS4class{XStringSet} or any of its subclasses such as a \linkS4class{QualityScaledXStringSet}.
 #' @inheritParams alabaster.base::saveObject
 #'
 #' @return The contents of \code{x} are saved into a \code{path}, and \code{NULL} is invisibly returned.
+#'
+#' @seealso
+#' \code{\link{readXStringSet}}, to read the XStringSet back into the R session.
 #'
 #' @author Aaron Lun
 #' @examples
