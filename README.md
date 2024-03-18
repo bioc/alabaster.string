@@ -1,13 +1,17 @@
 # Save biological sequence data to file
 
+|Environment|Status|
+|---|---|
+|[BioC-release](https://bioconductor.org/packages/release/bioc/html/alabaster.string.html)|[![Release OK](https://bioconductor.org/shields/build/release/bioc/alabaster.string.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/alabaster.string/)|
+|[BioC-devel](https://bioconductor.org/packages/devel/bioc/html/alabaster.string.html)|[![Devel OK](https://bioconductor.org/shields/build/devel/bioc/alabaster.string.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/alabaster.string/)|
+
 The **alabaster.string** package implements methods for saving and loading `XStringSet` objects under the **alabaster** framework.
 It provides a language-agnostic method for serializing biological sequences along with any sequence-specific metadata.
-To get started, install the package and its dependencies from GitHub:
+To get started, install the package and its dependencies from [Bioconductor](https://bioconductor.org/packages/alabaster.string):
 
 ```r
-devtools::install_github("ArtifactDB/alabaster.schemas")
-devtools::install_github("ArtifactDB/alabaster.base")
-devtools::install_github("ArtifactDB/alabaster.string")
+# install.packages("BiocManager")
+BiocManager::install("alabaster.string")
 ```
 
 In the example below, we save a `QualityScaledDNAStringSet` object to file:
@@ -30,12 +34,9 @@ qdna1
 
 library(alabaster.string)
 tmp <- tempfile()
-dir.create(tmp)
-meta <- stageObject(qdna1, tmp, "dna")
-meta[["$schema"]]
-## [1] "sequence_string_set/v1.json"
+saveObject(qdna1, tmp)
 
-roundtrip <- loadObject(meta, tmp)
+roundtrip <- readObject(tmp)
 class(roundtrip)
 ## [1] "QualityScaledDNAStringSet"
 ## attr(,"package")
