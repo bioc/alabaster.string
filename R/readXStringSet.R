@@ -1,17 +1,17 @@
 #' Read an XStringSet from disk.
 #'
-#' Read a \linkS4class{XStringSet} object from its on-disk representation.
-#' This is usually not directly called by users, but is instead called by dispatch in \code{\link{readObject}}.
+#' Read a \link[Biostrings]{XStringSet} object from its on-disk representation.
+#' This is usually not directly called by users, but is instead called by dispatch in \code{\link[alabaster.base]{readObject}}.
 #'
-#' @param path String containing a path to a directory, itself created using the \code{\link{saveObject}} method for \linkS4class{XStringSet} objects.
-#' @param metadata Named list of metadata for this object, see \code{\link{readObjectFile}} for details.
-#' @param ... Further arguments passed to internal \code{\link{altReadObject}} calls.
+#' @param path String containing a path to a directory, itself created using the \code{\link[alabaster.base]{saveObject}} method for \link[Biostrings]{XStringSet} objects.
+#' @param metadata Named list of metadata for this object, see \code{\link[alabaster.base]{readObjectFile}} for details.
+#' @param ... Further arguments passed to internal \code{\link[alabaster.base]{altReadObject}} calls.
 #'
-#' @return An \linkS4class{XStringSet} subclass containing DNA, RNA, protein or custom sequences.
-#' This may also be a \linkS4class{QualityScaledDNAStringSet} with quality scores.
+#' @return An \link[Biostrings]{XStringSet} subclass containing DNA, RNA, protein or custom sequences.
+#' This may also be a \link[Biostrings]{QualityScaledDNAStringSet} with quality scores.
 #'
 #' @seealso
-#' \code{"\link{saveObject,XStringSet-method}"}, to save an \linkS4class{XStringSet} to disk.
+#' \code{"\link{saveObject,XStringSet-method}"}, to save an \link[Biostrings]{XStringSet} to disk.
 #'
 #' @examples
 #' library(Biostrings)
@@ -73,6 +73,7 @@ readXStringSet <- function(path, metadata, ...) {
 
 #' @export
 loadXStringSet <- function(seq.info, project) {
+    .Deprecated(old = "loadXStringSet", new = "readXStringSet")
     seq.meta <- acquireMetadata(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
     seq.file <- acquireFile(project, path=seq.info$sequence_string_set$sequence_file$resource$path)
 

@@ -8,19 +8,19 @@
 readXStringSet(path, metadata, ...)
 }
 \arguments{
-\item{path}{String containing a path to a directory, itself created using the \code{\link{saveObject}} method for \linkS4class{XStringSet} objects.}
+\item{path}{String containing a path to a directory, itself created using the \code{\link[alabaster.base]{saveObject}} method for \link[Biostrings]{XStringSet} objects.}
 
-\item{metadata}{Named list of metadata for this object, see \code{\link{readObjectFile}} for details.}
+\item{metadata}{Named list of metadata for this object, see \code{\link[alabaster.base]{readObjectFile}} for details.}
 
-\item{...}{Further arguments passed to internal \code{\link{altReadObject}} calls.}
+\item{...}{Further arguments passed to internal \code{\link[alabaster.base]{altReadObject}} calls.}
 }
 \value{
-An \linkS4class{XStringSet} subclass containing DNA, RNA, protein or custom sequences.
-This may also be a \linkS4class{QualityScaledDNAStringSet} with quality scores.
+An \link[Biostrings]{XStringSet} subclass containing DNA, RNA, protein or custom sequences.
+This may also be a \link[Biostrings]{QualityScaledDNAStringSet} with quality scores.
 }
 \description{
-Read a \linkS4class{XStringSet} object from its on-disk representation.
-This is usually not directly called by users, but is instead called by dispatch in \code{\link{readObject}}.
+Read a \link[Biostrings]{XStringSet} object from its on-disk representation.
+This is usually not directly called by users, but is instead called by dispatch in \code{\link[alabaster.base]{readObject}}.
 }
 \examples{
 library(Biostrings)
@@ -32,5 +32,5 @@ readObject(tmp)
 
 }
 \seealso{
-\code{"\link{saveObject,XStringSet-method}"}, to save an \linkS4class{XStringSet} to disk.
+\code{"\link{saveObject,XStringSet-method}"}, to save an \link[Biostrings]{XStringSet} to disk.
 }

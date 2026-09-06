@@ -21,7 +21,8 @@ Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
 biocViews:
     DataImport,
     DataRepresentation
+Encoding: UTF-8
+Config/roxygen2/version: 8.1.0

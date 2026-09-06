@@ -8,17 +8,23 @@ import(alabaster.base)
 import(methods)
 importClassesFrom(Biostrings,QualityScaledXStringSet)
 importClassesFrom(Biostrings,XStringSet)
-importFrom(Biostrings,quality)
-importFrom(Biostrings,readAAStringSet)
-importFrom(Biostrings,readBStringSet)
-importFrom(Biostrings,readDNAStringSet)
-importFrom(Biostrings,readQualityScaledDNAStringSet)
-importFrom(Biostrings,readRNAStringSet)
-importFrom(Biostrings,writeQualityScaledXStringSet)
-importFrom(Biostrings,writeXStringSet)
+importFrom(Biostrings,
+  quality,
+  readAAStringSet,
+  readBStringSet,
+  readDNAStringSet,
+  readQualityScaledDNAStringSet,
+  readRNAStringSet,
+  writeQualityScaledXStringSet,
+  writeXStringSet
+)
 importFrom(S4Vectors,mcols)
-importFrom(alabaster.base,.restoreMetadata)
-importFrom(alabaster.base,acquireFile)
-importFrom(alabaster.base,acquireMetadata)
-importFrom(utils,read.table)
-importFrom(utils,write.table)
+importFrom(alabaster.base,
+  .restoreMetadata,
+  acquireFile,
+  acquireMetadata
+)
+importFrom(utils,
+  read.table,
+  write.table
+)
