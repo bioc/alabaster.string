@@ -1,7 +1,7 @@
 Package: alabaster.string
 Title: Save and Load Biostrings to/from File
-Version: 1.13.0
-Date: 2023-12-29
+Version: 1.13.1
+Date: 2026-09-06
 Description: Save Biostrings objects to file artifacts, and load them back into memory.
     This is a more portable alternative to serialization of such objects into RDS files.
     Each artifact is associated with metadata for further interpretation;
